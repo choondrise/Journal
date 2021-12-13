@@ -153,7 +153,7 @@ public class JournalEntry implements Comparable<JournalEntry> {
 
     @Override
     public String toString() {
-        return this.rating + "\n" +
+        return String.format("%.2f", this.rating) + "\n" +
                 this.events + "\n" +
                 this.spent + "\n";
     }
