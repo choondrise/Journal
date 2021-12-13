@@ -153,11 +153,9 @@ public class JournalEntry implements Comparable<JournalEntry> {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.rating).append("\n")
-                .append(this.events).append("\n")
-                .append(this.spent).append("\n");
-        return sb.toString();
+        return this.rating + "\n" +
+                this.events + "\n" +
+                this.spent + "\n";
     }
 
 }
