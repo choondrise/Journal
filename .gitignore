@@ -221,4 +221,7 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
+# everything inside resources folder
+src/main/resources/**
+
 # End of https://www.toptal.com/developers/gitignore/api/java,maven,intellij,eclipse
