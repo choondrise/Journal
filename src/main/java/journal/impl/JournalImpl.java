@@ -4,11 +4,7 @@ import journal.Journal;
 import journal.JournalEntry;
 import journal.parser.EntryParser;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
-import java.util.OptionalDouble;
+import java.util.*;
 
 /**
  *
@@ -27,30 +23,22 @@ public class JournalImpl implements Journal {
     }
 
     @Override
-    public float averageRating() {
+    public double averageRating() {
         OptionalDouble avg = entries.stream().mapToDouble(JournalEntry::getRating).average();
-        return avg.isPresent() ? (float) avg.getAsDouble() : 0.0f;
+        return avg.isPresent() ? avg.getAsDouble() : 0.0f;
     }
 
     @Override
-    public float averageSpent() {
+    public double averageSpent() {
         OptionalDouble avg = entries.stream().mapToDouble(JournalEntry::getSpent).average();
-        return avg.isPresent() ? (float) avg.getAsDouble() : 0.0f;
+        return avg.isPresent() ? avg.getAsDouble() : 0.0f;
     }
 
     @Override
-    public float averageSleep() {
-        float totalHrs = 0.0f;
-
-        for (int i = 0; i < entries.size() - 1; i++) {
-            Date start = entries.get(i + 1).getStart();
-            Date end = entries.get(i).getEnd();
-
-            long millisecondsSleep = start.getTime() - end.getTime();
-            float hrs = millisecondsSleep * 1.0f / 3_600_000;
-            totalHrs += hrs < 24 ? hrs : hrs - 24;
-        }
-        return totalHrs / entries.size();
+    public double averageSleep() {
+        double[] allSleeps = allSleeps();
+        OptionalDouble avg = Arrays.stream(allSleeps).average();
+        return avg.isPresent() ? avg.getAsDouble() : 0.0f;
     }
 
     @Override
@@ -74,18 +62,32 @@ public class JournalImpl implements Journal {
     }
 
     @Override
-    public float[] allRatings() {
-        return new float[0];
+    public double[] allRatings() {
+        return entries.stream().mapToDouble(JournalEntry::getRating).toArray();
     }
 
     @Override
-    public float[] allSpent() {
-        return new float[0];
+    public int[] allSpent() {
+        return entries.stream().mapToInt(JournalEntry::getSpent).toArray();
     }
 
     @Override
-    public float[] allSleeps() {
-        return new float[0];
+    public double[] allSleeps() {
+
+        double[] sleeps = new double[entries.size() - 1];
+
+        for (int i = 0; i < entries.size() - 1; i++) {
+            Date start = entries.get(i + 1).getStart();
+            Date end = entries.get(i).getEnd();
+
+            long millisecondsSleep = start.getTime() - end.getTime();
+            double hrs = millisecondsSleep * 1.0f / 3_600_000;
+            if (hrs > 24) hrs -= 24;
+
+            sleeps[i] = (hrs);
+        }
+
+        return sleeps;
     }
 
     @Override
@@ -112,6 +114,12 @@ public class JournalImpl implements Journal {
             System.out.println("Average rating: " + journal.averageRating());
             System.out.println("Average sleep: " + journal.averageSleep());
             System.out.println("Average spent: " + journal.averageSpent());
+
+            System.out.println("------------------");
+
+            System.out.println("All ratings: " + Arrays.toString(journal.allRatings()));
+            System.out.println("All sleeps: " + Arrays.toString(journal.allSleeps()));
+            System.out.println("All spent: " + Arrays.toString(journal.allSpent()));
 
         } catch (Exception e) {
             System.out.println("Error while parsing: " + e.getLocalizedMessage());

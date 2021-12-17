@@ -12,19 +12,19 @@ public interface Journal {
      *
      * @return
      */
-    float averageRating();
+    double averageRating();
 
     /**
      *
      * @return
      */
-    float averageSpent();
+    double averageSpent();
 
     /**
      *
      * @return
      */
-    float averageSleep();
+    double averageSleep();
 
     /**
      *
@@ -54,19 +54,19 @@ public interface Journal {
      *
      * @return
      */
-    float[] allRatings();
+    double[] allRatings();
 
     /**
      *
      * @return
      */
-    float[] allSpent();
+    int[] allSpent();
 
     /**
      *
      * @return
      */
-    float[] allSleeps();
+    double[] allSleeps();
 
     /**
      *
