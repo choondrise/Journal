@@ -1,6 +1,7 @@
 package journal;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Represents Journal which keeps track of rating, day start,
@@ -72,5 +73,11 @@ public interface Journal {
      * <code>false</code> otherwise
      */
     boolean ratingDependsOnMoneySpent();
+
+    /**
+     * @return <code>Map</code> with keys representing event type and
+     * entries representing average rating of days with that event type
+     */
+    Map<String, Double> ratingDependingOnEventType();
 
 }
