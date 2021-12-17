@@ -40,6 +40,11 @@ public class JournalEntry implements Comparable<JournalEntry> {
     private int spent;
 
     /**
+     * type of event happened that day
+     */
+    private EventType type;
+
+    /**
      * Class constructor which initializes all the variables.
      *
      * @param date day date to be initialized
@@ -49,13 +54,14 @@ public class JournalEntry implements Comparable<JournalEntry> {
      * @param events day events to be initialized
      * @param spent money spent that day to be initialized
      */
-    public JournalEntry(Date date, double rating, Date start, Date end, String events, int spent) {
+    public JournalEntry(Date date, double rating, Date start, Date end, String events, int spent, EventType type) {
         this.date = date;
         this.rating = rating;
         this.start = start;
         this.end = end;
         this.events = events;
         this.spent = spent;
+        this.type = type;
     }
 
     /**
@@ -142,6 +148,20 @@ public class JournalEntry implements Comparable<JournalEntry> {
         this.spent = spent;
     }
 
+    /**
+     * @return event type of that day
+     */
+    public EventType getType() {
+        return type;
+    }
+
+    /**
+     * @param type type of daily events to be set
+     */
+    public void setType(EventType type) {
+        this.type = type;
+    }
+
     @Override
     public int compareTo(JournalEntry o) {
         if (o == null) {
@@ -168,7 +188,8 @@ public class JournalEntry implements Comparable<JournalEntry> {
     public String toString() {
         return String.format("%.2f", this.rating) + "\n" +
                 this.events + "\n" +
-                this.spent + "\n";
+                this.spent + "\n" +
+                this.type;
     }
 
 }
