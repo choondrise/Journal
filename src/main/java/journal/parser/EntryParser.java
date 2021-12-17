@@ -7,11 +7,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.sql.SQLOutput;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * Reads resource directory contents and returns <code>List</code>
+ * of <code>JournalEntries</code> parsed from traversed documents.
+ *
+ * @author choondrise
+ */
 public class EntryParser {
 
     /**
