@@ -3,80 +3,73 @@ package journal;
 import java.util.Date;
 
 /**
+ * Represents Journal which keeps track of rating, day start,
+ * day end, events and money spent in each day. Journal also
+ * provides some basic statistics about chosen span of days.
  *
  * @author choondrise
  */
 public interface Journal {
 
     /**
-     *
-     * @return
+     * @return average rating of all days
      */
     double averageRating();
 
     /**
-     *
-     * @return
+     * @return average money spent in all days
      */
     double averageSpent();
 
     /**
-     *
-     * @return
+     * @return average sleep in all days
      */
     double averageSleep();
 
     /**
-     *
-     * @return
+     * @return average time went to bed
      */
     Date bedTime();
 
     /**
-     *
-     * @return
+     * @return average time woke up
      */
     Date wakeUpTime();
 
     /**
-     *
-     * @return
+     * @return best rated day in week
      */
     int topDayOfTheWeek();
 
     /**
-     *
-     * @return
+     * @return top-rated day ever
      */
     JournalEntry maxRatingEntry();
 
     /**
-     *
-     * @return
+     * @return array of all the ratings
      */
     double[] allRatings();
 
     /**
-     *
-     * @return
+     * @return array of all money spent
      */
     int[] allSpent();
 
     /**
-     *
-     * @return
+     * @return array of all time slept
      */
     double[] allSleeps();
 
     /**
-     *
-     * @return
+     * @return <code>true</code> if money spent depends on day number,
+     * <code>false</code> otherwise
      */
     boolean moneySpentDependsOnDayNumber();
 
     /**
-     *
-     * @return
+     * @return <code>true</code> if rating depends on day number,
+     * <code>false</code> otherwise
      */
     boolean ratingDependsOnMoneySpent();
 
