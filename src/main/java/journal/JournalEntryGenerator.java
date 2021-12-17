@@ -3,7 +3,6 @@ package journal;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.time.LocalDate;
 
 /**
@@ -26,16 +25,17 @@ public class JournalEntryGenerator {
         String month = String.format("%02d", LocalDate.now().getMonthValue());
         String year = String.valueOf(LocalDate.now().getYear());
 
-        String fileName = String.format("%s-%s-%s", day, month, year);
+        String fileName = String.format("%s-%s-%s", 18, month, year);
+        String dirName = System.getProperty("user.dir");
 
         try {
-            File file = new File(fileName);
+            File file = new File(dirName + "/src/main/resources/" + fileName);
 
             if (file.exists()) {
-                System.out.println("File " + fileName + " already exists.");
+                System.out.println("File " + file.getName() + " already exists.");
             } else if (file.createNewFile()) {
-                System.out.println("File created: " + fileName);
-                initializeJournalEntry(fileName);
+                System.out.println("File created: " + file.getName());
+                initializeJournalEntry(file);
             }
         } catch (IOException e) {
             System.out.println("Could not create file: " + fileName);
@@ -46,16 +46,16 @@ public class JournalEntryGenerator {
     /**
      * Writes basic journal entry to file with name <code>fileName</code>.
      *
-     * @param fileName name of the file to be written to
+     * @param file file to be written to
      */
-    private static void initializeJournalEntry(String fileName) {
+    private static void initializeJournalEntry(File file) {
         try {
-            FileWriter writer = new FileWriter(fileName);
+            FileWriter writer = new FileWriter(file);
             writer.write("[RATING]\n\n[START]\n\n[END]\n\n[EVENTS]\n\n[SPENT]\n\n");
             writer.close();
-            System.out.println("Successfully wrote to file: " + fileName);
+            System.out.println("Successfully wrote to file: " + file);
         } catch (IOException e) {
-            System.out.println("Could not write to file: " + fileName);
+            System.out.println("Could not write to file: " + file);
         }
     }
 }
