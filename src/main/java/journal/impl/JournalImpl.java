@@ -7,16 +7,23 @@ import journal.parser.EntryParser;
 import java.util.*;
 
 /**
+ * Implementation of <code>Journal</code> interface.
  *
  * @author choondrise
  */
 public class JournalImpl implements Journal {
 
+    /**
+     * <code>JournalEntries</code> used for calculating all the statistics.
+     * Generated using <code>EntryParser</code>.
+     */
     private List<JournalEntry> entries;
 
     /**
+     * Class constructor which initializes list of
+     * <code>JournalEntries</code>.
      *
-     * @param entries
+     * @param entries list of journal entries to be initialized
      */
     public JournalImpl(List<JournalEntry> entries) {
         this.entries = entries;
@@ -108,7 +115,6 @@ public class JournalImpl implements Journal {
 
         try {
             entries = EntryParser.parse();
-            // entries.forEach(System.out::println);
             Journal journal = new JournalImpl(entries);
 
             System.out.println("Average rating: " + journal.averageRating());
