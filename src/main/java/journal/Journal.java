@@ -76,7 +76,7 @@ public interface Journal {
 
     /**
      * @return <code>Map</code> with keys representing event type and
-     * entries representing average rating of days with that event type
+     * values representing average rating of days with that event type
      */
     Map<String, Double> ratingBasedOnEventType();
 

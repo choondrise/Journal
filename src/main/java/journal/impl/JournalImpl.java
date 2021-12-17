@@ -1,10 +1,12 @@
 package journal.impl;
 
+import com.sun.source.tree.Tree;
 import journal.Journal;
 import journal.JournalEntry;
 import journal.parser.EntryParser;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of <code>Journal</code> interface.
@@ -107,6 +109,31 @@ public class JournalImpl implements Journal {
         return false;
     }
 
+    @Override
+    public Map<String, Double> ratingBasedOnEventType() {
+        Map<String, Double> ratings = entries.stream()
+                        .collect(Collectors.groupingBy(e -> e.getType().toString(),
+                                HashMap::new,
+                                Collectors.averagingDouble(JournalEntry::getRating)));
+
+        Map<String, Double> averages = new TreeMap<>();
+        for (Map.Entry<String, Double> entry : ratings.entrySet()) {
+            String key = entry.getKey();
+            String newKey = "";
+            Double rating = ratings.get(key);
+
+            switch (key) {
+                case "Z" -> newKey = "Zvrnzla";
+                case "A" -> newKey = "Alkohol";
+                case "N" -> newKey = "Nista";
+            }
+
+            averages.put(newKey, rating);
+        }
+
+        return averages;
+    }
+
     /**
      * Main method for running the program.
      */
@@ -117,15 +144,14 @@ public class JournalImpl implements Journal {
             entries = EntryParser.parse();
             Journal journal = new JournalImpl(entries);
 
-            System.out.println("Average rating: " + journal.averageRating());
-            System.out.println("Average sleep: " + journal.averageSleep());
-            System.out.println("Average spent: " + journal.averageSpent());
+            // TODO: try communicating with user and output accordingly
+
+            System.out.printf("Average rating\t: %.2f\n", journal.averageRating());
+            System.out.printf("Average sleep\t: %.2f\n", journal.averageSleep());
+            System.out.printf("Average spent\t: %.2f\n", journal.averageSpent());
 
             System.out.println("------------------");
-
-            System.out.println("All ratings: " + Arrays.toString(journal.allRatings()));
-            System.out.println("All sleeps: " + Arrays.toString(journal.allSleeps()));
-            System.out.println("All spent: " + Arrays.toString(journal.allSpent()));
+            journal.ratingBasedOnEventType().forEach((k, v) -> System.out.printf("%s\t -> %.2f\n", k, v));
 
         } catch (Exception e) {
             System.out.println("Error while parsing: " + e.getLocalizedMessage());
