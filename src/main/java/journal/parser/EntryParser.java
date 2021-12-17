@@ -32,7 +32,8 @@ public class EntryParser {
      * and their names
      */
     private static Map<String, String> readDirContent() throws IOException {
-        File currentDir = new File(System.getProperty("user.dir"));
+        String dirPath = System.getProperty("user.dir");
+        File currentDir = new File(dirPath + "/src/main/resources/");
 
         if (!currentDir.isDirectory()) {
             throw new IOException("Invalid program position, must be in a directory with readable text files.");
@@ -64,6 +65,16 @@ public class EntryParser {
             String[] entryParts = file.getValue().split("\\n");
 
             if (entryParts.length < 10) continue;
+
+            boolean cont = false;
+            for (String entry : entryParts) {
+                if (entry.equals("")) {
+                    cont = true;
+                    break;
+                }
+            }
+
+            if (cont) continue;
 
             Date day = new SimpleDateFormat("dd-MM-yyyy").parse(file.getKey());
             float rating = Float.parseFloat(entryParts[1]);

@@ -51,7 +51,7 @@ public class JournalEntryGenerator {
     private static void initializeJournalEntry(File file) {
         try {
             FileWriter writer = new FileWriter(file);
-            writer.write("[RATING]\n\n[START]\n\n[END]\n\n[EVENTS]\n\n[SPENT]\n\n");
+            writer.write("[RATING]\n\n[START]\n\n[END]\n\n[EVENTS]\n\n[SPENT]\n");
             writer.close();
             System.out.println("Successfully wrote to file: " + file);
         } catch (IOException e) {
