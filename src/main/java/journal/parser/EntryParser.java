@@ -1,5 +1,6 @@
 package journal.parser;
 
+import journal.EventType;
 import journal.JournalEntry;
 
 import java.io.File;
@@ -69,7 +70,7 @@ public class EntryParser {
         for (Map.Entry<String, String> file : files.entrySet()) {
             String[] entryParts = file.getValue().split("\\n");
 
-            if (entryParts.length < 10) continue;
+            if (entryParts.length < 12) continue;
 
             boolean cont = false;
             for (String entry : entryParts) {
@@ -87,8 +88,18 @@ public class EntryParser {
             Date end = new SimpleDateFormat("dd-MM-yyyy HH:mm").parse(file.getKey() + " " + dateFormatFix(entryParts[5]));
             String events = entryParts[7];
             int spent = Integer.parseInt(entryParts[9]);
+            String typeName = entryParts[11];
 
-            entries.add(new JournalEntry(day, rating, start, end, events, spent));
+            EventType type;
+
+            switch(typeName) {
+                case "Z" -> type = EventType.Z;
+                case "A" -> type = EventType.A;
+                case "N" -> type = EventType.N;
+                default -> throw new IOException("Cannot read event type");
+            }
+
+            entries.add(new JournalEntry(day, rating, start, end, events, spent, type));
 
         }
 
