@@ -80,4 +80,10 @@ public interface Journal {
      */
     Map<String, Double> ratingBasedOnEventType();
 
+    /**
+     * @return <code>Map</code> with keys representing weekday and
+     * values representing average rating of all same days of the week
+     */
+    Map<String, Double> ratingBasedOnWeekday();
+
 }

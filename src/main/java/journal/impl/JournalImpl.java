@@ -1,10 +1,11 @@
 package journal.impl;
 
-import com.sun.source.tree.Tree;
 import journal.Journal;
 import journal.JournalEntry;
 import journal.parser.EntryParser;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -134,6 +135,38 @@ public class JournalImpl implements Journal {
         return averages;
     }
 
+    @Override
+    public Map<String, Double> ratingBasedOnWeekday() {
+        Map<Integer, Double> ratings = entries.stream()
+                .collect(Collectors.groupingBy(e -> {
+                            LocalDate ld = LocalDate.ofInstant(e.getDate().toInstant(), ZoneId.systemDefault());
+                            return ld.getDayOfWeek().getValue();
+                        },
+                        HashMap::new,
+                        Collectors.averagingDouble(JournalEntry::getRating)));
+
+        Map<String, Double> averages = new LinkedHashMap<>();
+        for (Map.Entry<Integer, Double> entry : ratings.entrySet()) {
+            int key = entry.getKey();
+            String newKey = "";
+            Double rating = ratings.get(key);
+
+            switch (key) {
+                case 1 -> newKey = "MON";
+                case 2 -> newKey = "TUE";
+                case 3 -> newKey = "WED";
+                case 4 -> newKey = "THU";
+                case 5 -> newKey = "FRI";
+                case 6 -> newKey = "SAT";
+                case 7 -> newKey = "SUN";
+            }
+
+            averages.put(newKey, rating);
+        }
+
+        return averages;
+    }
+
     /**
      * Main method for running the program.
      */
@@ -146,12 +179,15 @@ public class JournalImpl implements Journal {
 
             // TODO: try communicating with user and output accordingly
 
-            System.out.printf("Average rating\t: %.2f\n", journal.averageRating());
-            System.out.printf("Average sleep\t: %.2f\n", journal.averageSleep());
-            System.out.printf("Average spent\t: %.2f\n", journal.averageSpent());
+            System.out.printf("Average rating\t: %5.2f\n", journal.averageRating());
+            System.out.printf("Average sleep\t: %5.2f\n", journal.averageSleep());
+            System.out.printf("Average spent\t: %5.2f\n", journal.averageSpent());
 
-            System.out.println("------------------");
+            System.out.println("-----------------------");
             journal.ratingBasedOnEventType().forEach((k, v) -> System.out.printf("%s\t -> %.2f\n", k, v));
+            System.out.println("-----------------------");
+            journal.ratingBasedOnWeekday().forEach((k, v) -> System.out.printf("%s\t -> %.2f\n", k, v));
+            System.out.println("-----------------------");
 
         } catch (Exception e) {
             System.out.println("Error while parsing: " + e.getLocalizedMessage());
