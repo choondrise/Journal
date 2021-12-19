@@ -63,6 +63,11 @@ public interface Journal {
     double[] allSleeps();
 
     /**
+     * @return total amount of money spent
+     */
+    int totalSpent();
+
+    /**
      * @return <code>true</code> if money spent depends on day number,
      * <code>false</code> otherwise
      */

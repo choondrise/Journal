@@ -167,6 +167,11 @@ public class JournalImpl implements Journal {
         return averages;
     }
 
+    @Override
+    public int totalSpent() {
+        return Arrays.stream(allSpent()).sum();
+    }
+
     /**
      * Main method for running the program.
      */
@@ -188,6 +193,7 @@ public class JournalImpl implements Journal {
             System.out.println("-----------------------");
             journal.ratingBasedOnWeekday().forEach((k, v) -> System.out.printf("%s\t -> %.2f\n", k, v));
             System.out.println("-----------------------");
+            System.out.println("Spent HRK " + journal.totalSpent() + " in " + journal.allSpent().length + " days.");
 
         } catch (Exception e) {
             System.out.println("Error while parsing: " + e.getLocalizedMessage());
