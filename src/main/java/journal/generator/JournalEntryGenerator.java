@@ -1,4 +1,4 @@
-package journal;
+package journal.generator;
 
 import java.io.File;
 import java.io.FileWriter;

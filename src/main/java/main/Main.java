@@ -1,8 +1,11 @@
-package journal.impl;
+package main;
 
 import journal.Journal;
 import journal.JournalEntry;
-import journal.parser.EntryParser;
+import journal.parser.JournalEntryParser;
+import planner.PlanEntry;
+import planner.Planner;
+import planner.parser.PlanEntryParser;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -10,17 +13,24 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Implementation of <code>Journal</code> interface.
+ * Implementation of <code>Journal</code> and <code>Planner</code> interface.
+ * Provides inside into journaling and planning statistics.
  *
  * @author choondrise
  */
-public class JournalImpl implements Journal {
+public class Main implements Journal, Planner {
 
     /**
-     * <code>JournalEntries</code> used for calculating all the statistics.
-     * Generated using <code>EntryParser</code>.
+     * <code>JournalEntries</code> used for calculating journaling statistics.
+     * Generated using <code>JournalEntryParser</code>.
      */
     private List<JournalEntry> entries;
+
+    /**
+     * <code>PlanEntries</code> used for calculating planning statistics.
+     * Generated using <code>PlanEntryParser</code>.
+     */
+    private List<PlanEntry> plans;
 
     /**
      * Class constructor which initializes list of
@@ -28,8 +38,9 @@ public class JournalImpl implements Journal {
      *
      * @param entries list of journal entries to be initialized
      */
-    public JournalImpl(List<JournalEntry> entries) {
+    public Main(List<JournalEntry> entries, List<PlanEntry> plans) {
         this.entries = entries;
+        this.plans = plans;
     }
 
     @Override
@@ -177,12 +188,18 @@ public class JournalImpl implements Journal {
      */
     public static void main(String[] args) {
         List<JournalEntry> entries;
+        List<PlanEntry> plans;
 
         try {
-            entries = EntryParser.parse();
-            Journal journal = new JournalImpl(entries);
+            entries = JournalEntryParser.parse();
+            plans = PlanEntryParser.parse();
+            Journal journal = new Main(entries, plans);
 
             // TODO: try communicating with user and output accordingly
+
+            System.out.println("\n#############");
+            System.out.println("## JOURNAL ##");
+            System.out.println("#############\n\n\n");
 
             System.out.printf("Average rating\t: %5.2f\n", journal.averageRating());
             System.out.printf("Average sleep\t: %5.2f\n", journal.averageSleep());
@@ -195,8 +212,59 @@ public class JournalImpl implements Journal {
             System.out.println("-----------------------");
             System.out.println("Spent HRK " + journal.totalSpent() + " in " + journal.allSpent().length + " days.");
 
+            System.out.println("\n\n\n#############");
+            System.out.println("### PLANS ###");
+            System.out.println("#############\n\n\n");
+
+            plans.forEach(System.out::println);
+
         } catch (Exception e) {
             System.out.println("Error while parsing: " + e.getLocalizedMessage());
         }
+    }
+
+    @Override
+    public short totalPlansThisWeek() {
+        return 0;
+    }
+
+    @Override
+    public short completedPlansThisWeek() {
+        return 0;
+    }
+
+    @Override
+    public short totalPlansThisMonth() {
+        return 0;
+    }
+
+    @Override
+    public short completedPlansThisMonth() {
+        return 0;
+    }
+
+    @Override
+    public short totalPlansThisYear() {
+        return 0;
+    }
+
+    @Override
+    public short completedPlansThisYear() {
+        return 0;
+    }
+
+    @Override
+    public String[] allWeeklyPlans() {
+        return new String[0];
+    }
+
+    @Override
+    public String[] allMonthlyPlans() {
+        return new String[0];
+    }
+
+    @Override
+    public String[] allYearlyPlans() {
+        return new String[0];
     }
 }
