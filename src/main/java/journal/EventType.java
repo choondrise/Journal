@@ -19,5 +19,10 @@ public enum EventType {
     /**
      * nothing
      */
-    N;
+    N,
+
+    /**
+     * mixed a and z
+     */
+    M;
 }

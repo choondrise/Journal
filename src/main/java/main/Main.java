@@ -138,6 +138,7 @@ public class Main implements Journal, Planner {
                 case "Z" -> newKey = "Zvrnzla";
                 case "A" -> newKey = "Alkohol";
                 case "N" -> newKey = "Nista";
+                case "M" -> newKey = "Mix";
             }
 
             averages.put(newKey, rating);
@@ -206,7 +207,7 @@ public class Main implements Journal, Planner {
             System.out.printf("Average spent\t: %5.2f\n", journal.averageSpent());
 
             System.out.println("-----------------------");
-            journal.ratingBasedOnEventType().forEach((k, v) -> System.out.printf("%s\t -> %.2f\n", k, v));
+            journal.ratingBasedOnEventType().forEach((k, v) -> System.out.printf("%-10s -> %.2f\n", k, v));
             System.out.println("-----------------------");
             journal.ratingBasedOnWeekday().forEach((k, v) -> System.out.printf("%s\t -> %.2f\n", k, v));
             System.out.println("-----------------------");

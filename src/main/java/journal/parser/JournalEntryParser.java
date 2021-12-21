@@ -56,6 +56,7 @@ public class JournalEntryParser {
                 case "Z" -> type = EventType.Z;
                 case "A" -> type = EventType.A;
                 case "N" -> type = EventType.N;
+                case "M" -> type = EventType.M;
                 default -> throw new IOException("Cannot read event type");
             }
 
