@@ -123,28 +123,11 @@ public class Main implements Journal, Planner {
 
     @Override
     public Map<String, Double> ratingBasedOnEventType() {
-        Map<String, Double> ratings = entries.stream()
+
+        return entries.stream()
                         .collect(Collectors.groupingBy(e -> e.getType().toString(),
                                 HashMap::new,
                                 Collectors.averagingDouble(JournalEntry::getRating)));
-
-        Map<String, Double> averages = new TreeMap<>();
-        for (Map.Entry<String, Double> entry : ratings.entrySet()) {
-            String key = entry.getKey();
-            String newKey = "";
-            Double rating = ratings.get(key);
-
-            switch (key) {
-                case "Z" -> newKey = "Zvrnzla";
-                case "A" -> newKey = "Alkohol";
-                case "N" -> newKey = "Nista";
-                case "M" -> newKey = "Mix";
-            }
-
-            averages.put(newKey, rating);
-        }
-
-        return averages;
     }
 
     @Override
@@ -207,7 +190,7 @@ public class Main implements Journal, Planner {
             System.out.printf("Average spent\t: %5.2f\n", journal.averageSpent());
 
             System.out.println("-----------------------");
-            journal.ratingBasedOnEventType().forEach((k, v) -> System.out.printf("%-10s -> %.2f\n", k, v));
+            journal.ratingBasedOnEventType().forEach((k, v) -> System.out.printf("%s -> %.2f\n", k, v));
             System.out.println("-----------------------");
             journal.ratingBasedOnWeekday().forEach((k, v) -> System.out.printf("%s\t -> %.2f\n", k, v));
             System.out.println("-----------------------");
