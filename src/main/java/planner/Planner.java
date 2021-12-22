@@ -8,35 +8,26 @@ package planner;
 public interface Planner {
 
     /**
-     * @return number of total made plans this week
+     * @return number of total made plans based on <code>PlanType</code>
      */
-    short totalPlansThisWeek();
+    short totalPlansByInterval(PlanType type);
 
     /**
-     * @return number of completed plans this week
+     * @return number of completed plans based on <code>PlanType</code>
      */
-    short completedPlansThisWeek();
+    short completedPlansByInterval(PlanType type);
 
     /**
-     * @return number of total made plans this month
-     */
-    short totalPlansThisMonth();
-
-    /**
-     * @return number of completed plans this month
-     */
-    short completedPlansThisMonth();
-
-    /**
+     * Returns percentage of completed plans in an interval based on
+     * given <code>PlanType</code>.
      *
-     * @return number of total made plans this year
+     * @param type type whose percentage is to be calculated
+     * @return calculated percentage
      */
-    short totalPlansThisYear();
-
-    /**
-     * @return number of completed plans this year
-     */
-    short completedPlansThisYear();
+    default String percentageOfCompletedPlansByInterval(PlanType type) {
+        double pct = (completedPlansByInterval(type) * 1.0D) / totalPlansByInterval(type) * 100;
+        return String.format("%.2f", pct) + "%";
+    }
 
     /**
      * @return array of all weekly plans with completion status

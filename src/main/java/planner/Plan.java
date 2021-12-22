@@ -11,7 +11,7 @@ public class Plan {
      * Represents plan completion status, <code>true</code> if completed,
      * <code>false</code> otherwise.
      */
-    private boolean status;
+    private boolean completed;
 
     /**
      * Describes what plan actually is.
@@ -23,19 +23,19 @@ public class Plan {
      *
      * @param planDescription description to be set
      */
-    public Plan(boolean status, String planDescription) {
-        this.status = status;
+    public Plan(boolean completed, String planDescription) {
+        this.completed = completed;
         this.planDescription = planDescription;
     }
 
     // TODO: add javadoc
 
-    public boolean isStatus() {
-        return status;
+    public boolean isCompleted() {
+        return completed;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
     public String getPlanDescription() {
@@ -50,7 +50,7 @@ public class Plan {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        if (status)
+        if (completed)
             sb.append("[+]\t");
         else
             sb.append("[-]\t");

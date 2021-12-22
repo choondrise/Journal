@@ -3,7 +3,9 @@ package main;
 import journal.Journal;
 import journal.JournalEntry;
 import journal.parser.JournalEntryParser;
+import planner.Plan;
 import planner.PlanEntry;
+import planner.PlanType;
 import planner.Planner;
 import planner.parser.PlanEntryParser;
 
@@ -167,6 +169,82 @@ public class Main implements Journal, Planner {
         return Arrays.stream(allSpent()).sum();
     }
 
+
+    // #######################################################################################
+    // #######################################################################################
+    // #######################################################################################
+
+
+    @Override
+    public short totalPlansByInterval(PlanType type) {
+        PlanEntry lastWeek = findLastEntry(type);
+
+        if (lastWeek != null) {
+            return (short) (lastWeek.getPersonalPlans().length + lastWeek.getProfessionalPlans().length);
+        }
+
+        return 0;
+    }
+
+    @Override
+    public short completedPlansByInterval(PlanType type) {
+        PlanEntry lastWeek = findLastEntry(type);
+
+        if (lastWeek != null) {
+            short numOfCompleted = 0;
+
+            for (Plan p : lastWeek.getProfessionalPlans()) {
+                if (p.isCompleted()) {
+                    numOfCompleted++;
+                }
+            }
+
+            for (Plan p : lastWeek.getPersonalPlans()) {
+                if (p.isCompleted()) {
+                    numOfCompleted++;
+                }
+            }
+
+            return numOfCompleted;
+        }
+
+        return 0;
+    }
+
+    @Override
+    public String[] allWeeklyPlans() {
+        return new String[0];
+    }
+
+    @Override
+    public String[] allMonthlyPlans() {
+        return new String[0];
+    }
+
+    @Override
+    public String[] allYearlyPlans() {
+        return new String[0];
+    }
+
+    /**
+     * Finds last added entry based on <code>PlanType</code>.
+     *
+     * @param type type to be found
+     * @return last found entry, or {@code null} if nothing is found
+     */
+    private PlanEntry findLastEntry(PlanType type) {
+        PlanEntry last = null;
+
+        for (PlanEntry planEntry : plans) {
+            if (planEntry.getType() == type) {
+                last = planEntry;
+            }
+        }
+
+        return last;
+    }
+
+
     /**
      * Main method for running the program.
      */
@@ -177,7 +255,7 @@ public class Main implements Journal, Planner {
         try {
             entries = JournalEntryParser.parse();
             plans = PlanEntryParser.parse();
-            Journal journal = new Main(entries, plans);
+            Main journal = new Main(entries, plans);
 
             // TODO: try communicating with user and output accordingly
 
@@ -201,54 +279,12 @@ public class Main implements Journal, Planner {
             System.out.println("#############\n\n\n");
 
             plans.forEach(System.out::println);
+            System.out.printf("%-26s %d\n", "Plans completed this week:", journal.completedPlansByInterval(PlanType.WEEKLY));
+            System.out.printf("%-26s %d\n", "Plans made this week:", journal.totalPlansByInterval(PlanType.WEEKLY));
+            System.out.println(journal.percentageOfCompletedPlansByInterval(PlanType.WEEKLY));
 
         } catch (Exception e) {
             System.out.println("Error while parsing: " + e.getLocalizedMessage());
         }
-    }
-
-    @Override
-    public short totalPlansThisWeek() {
-        return 0;
-    }
-
-    @Override
-    public short completedPlansThisWeek() {
-        return 0;
-    }
-
-    @Override
-    public short totalPlansThisMonth() {
-        return 0;
-    }
-
-    @Override
-    public short completedPlansThisMonth() {
-        return 0;
-    }
-
-    @Override
-    public short totalPlansThisYear() {
-        return 0;
-    }
-
-    @Override
-    public short completedPlansThisYear() {
-        return 0;
-    }
-
-    @Override
-    public String[] allWeeklyPlans() {
-        return new String[0];
-    }
-
-    @Override
-    public String[] allMonthlyPlans() {
-        return new String[0];
-    }
-
-    @Override
-    public String[] allYearlyPlans() {
-        return new String[0];
     }
 }
