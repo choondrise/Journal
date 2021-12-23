@@ -180,6 +180,7 @@ public class Main implements Journal, Planner {
 
     @Override
     public String toJournal() {
+        System.out.println("+" + "-".repeat(101) + "+");
         StringBuilder sb = new StringBuilder();
 
         for (JournalEntry entry : entries) {
@@ -311,23 +312,25 @@ public class Main implements Journal, Planner {
         System.out.println("++++++++++++ JOURNAL ++++++++++++");
         System.out.println("+++++++++++++++++++++++++++++++++\n");
 
-        System.out.println("AVERAGES:\n");
+        System.out.println("AVERAGES:");
         System.out.printf("Average rating\t: %5.2f\n", this.averageRating());
         System.out.printf("Average sleep\t: %5.2f\n", this.averageSleep());
         System.out.printf("Average spent\t: %5.2f\n", this.averageSpent());
 
         System.out.println("-----------------------");
+        System.out.println("AVERAGES BY EVENT TYPE:");
         this.ratingBasedOnEventType().forEach((k, v) -> System.out.printf("%s -> %.2f\n", k, v));
-        System.out.println("-----------------------");
+        System.out.println();
         this.moneySpentBasedOnEventType().forEach((k, v) -> System.out.printf("%s -> HRK %.2f\n", k, v));
         System.out.println("-----------------------");
+
+        System.out.println("AVERAGES BY WEEKDAY:");
         this.ratingBasedOnWeekday().forEach((k, v) -> System.out.printf("%s\t -> %.2f\n", k, v));
         System.out.println("-----------------------\n");
 
 
         System.out.println("Spent HRK " + this.totalSpent() + " in " + this.allSpent().length + " days.\n");
 
-        System.out.println("+" + "-".repeat(101) + "+");
         System.out.println(this.toJournal());
 
     }
