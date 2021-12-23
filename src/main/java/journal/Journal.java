@@ -91,4 +91,15 @@ public interface Journal {
      */
     Map<String, Double> ratingBasedOnWeekday();
 
+    /**
+     * @return <code>Map</code> with keys representing event type and
+     * values representing average money spent on days with that event type
+     */
+    Map<String, Double> moneySpentBasedOnEventType();
+
+    /**
+     * @return journal-like output of every entry
+     */
+    String toJournal();
+
 }

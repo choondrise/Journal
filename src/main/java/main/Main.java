@@ -133,6 +133,15 @@ public class Main implements Journal, Planner {
     }
 
     @Override
+    public Map<String, Double> moneySpentBasedOnEventType() {
+
+        return entries.stream()
+                .collect(Collectors.groupingBy(e -> e.getType().toString(),
+                        HashMap::new,
+                        Collectors.averagingDouble(JournalEntry::getSpent)));
+    }
+
+    @Override
     public Map<String, Double> ratingBasedOnWeekday() {
         Map<Integer, Double> ratings = entries.stream()
                 .collect(Collectors.groupingBy(e -> {
@@ -167,6 +176,33 @@ public class Main implements Journal, Planner {
     @Override
     public int totalSpent() {
         return Arrays.stream(allSpent()).sum();
+    }
+
+    @Override
+    public String toJournal() {
+        StringBuilder sb = new StringBuilder();
+
+        for (JournalEntry entry : entries) {
+            sb.append(String.format("| %-100s|", entry.getDate())).append("\n");
+            StringBuilder line = new StringBuilder();
+            String[] events = entry.getEvents().split("\\s+");
+
+            for (String word : events) {
+                line.append(word).append(" ");
+
+                if (line.length() > 80) {
+                    sb.append(String.format("|   %-98s|\n", line.toString().trim()));
+                    line.delete(0, line.length());
+                }
+            }
+
+            sb.append(String.format("|   %-98s|\n", line))
+                    .append("+")
+                    .append("-".repeat(101))
+                    .append("+\n");
+        }
+
+        return sb.toString();
     }
 
 
@@ -259,32 +295,55 @@ public class Main implements Journal, Planner {
 
             // TODO: try communicating with user and output accordingly
 
-            System.out.println("\n#############");
-            System.out.println("## JOURNAL ##");
-            System.out.println("#############\n\n\n");
+            journal.journalOutput();
 
-            System.out.printf("Average rating\t: %5.2f\n", journal.averageRating());
-            System.out.printf("Average sleep\t: %5.2f\n", journal.averageSleep());
-            System.out.printf("Average spent\t: %5.2f\n", journal.averageSpent());
-
-            System.out.println("-----------------------");
-            journal.ratingBasedOnEventType().forEach((k, v) -> System.out.printf("%s -> %.2f\n", k, v));
-            System.out.println("-----------------------");
-            journal.ratingBasedOnWeekday().forEach((k, v) -> System.out.printf("%s\t -> %.2f\n", k, v));
-            System.out.println("-----------------------");
-            System.out.println("Spent HRK " + journal.totalSpent() + " in " + journal.allSpent().length + " days.");
-
-            System.out.println("\n\n\n#############");
-            System.out.println("### PLANS ###");
-            System.out.println("#############\n\n\n");
-
-            plans.forEach(System.out::println);
-            System.out.printf("%-26s %d\n", "Plans completed this week:", journal.completedPlansByInterval(PlanType.WEEKLY));
-            System.out.printf("%-26s %d\n", "Plans made this week:", journal.totalPlansByInterval(PlanType.WEEKLY));
-            System.out.println(journal.percentageOfCompletedPlansByInterval(PlanType.WEEKLY));
 
         } catch (Exception e) {
             System.out.println("Error while parsing: " + e.getLocalizedMessage());
         }
     }
+
+    /**
+     * Outputs everything journal-related.
+     */
+    private void journalOutput() {
+        System.out.println("\n+++++++++++++++++++++++++++++++++");
+        System.out.println("++++++++++++ JOURNAL ++++++++++++");
+        System.out.println("+++++++++++++++++++++++++++++++++\n");
+
+        System.out.println("AVERAGES:\n");
+        System.out.printf("Average rating\t: %5.2f\n", this.averageRating());
+        System.out.printf("Average sleep\t: %5.2f\n", this.averageSleep());
+        System.out.printf("Average spent\t: %5.2f\n", this.averageSpent());
+
+        System.out.println("-----------------------");
+        this.ratingBasedOnEventType().forEach((k, v) -> System.out.printf("%s -> %.2f\n", k, v));
+        System.out.println("-----------------------");
+        this.moneySpentBasedOnEventType().forEach((k, v) -> System.out.printf("%s -> HRK %.2f\n", k, v));
+        System.out.println("-----------------------");
+        this.ratingBasedOnWeekday().forEach((k, v) -> System.out.printf("%s\t -> %.2f\n", k, v));
+        System.out.println("-----------------------\n");
+
+
+        System.out.println("Spent HRK " + this.totalSpent() + " in " + this.allSpent().length + " days.\n");
+
+        System.out.println("+" + "-".repeat(101) + "+");
+        System.out.println(this.toJournal());
+
+    }
+
+    /**
+     * Outputs everything planner-related.
+     */
+    private void plansOutput() {
+        System.out.println("\n\n\n#############");
+        System.out.println("### PLANS ###");
+        System.out.println("#############\n\n\n");
+
+        plans.forEach(System.out::println);
+        System.out.printf("%-26s %d\n", "Plans completed this week:", this.completedPlansByInterval(PlanType.WEEKLY));
+        System.out.printf("%-26s %d\n", "Plans made this week:", this.totalPlansByInterval(PlanType.WEEKLY));
+        System.out.println(this.percentageOfCompletedPlansByInterval(PlanType.WEEKLY));
+    }
+
 }
