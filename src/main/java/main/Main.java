@@ -1,5 +1,6 @@
 package main;
 
+import journal.EventType;
 import journal.Journal;
 import journal.JournalEntry;
 import journal.parser.JournalEntryParser;
@@ -206,6 +207,37 @@ public class Main implements Journal, Planner {
         return sb.toString();
     }
 
+    @Override
+    public Map<EventType, Integer> numOfEventTypes() {
+
+        Map<EventType, Integer> types = new HashMap<>();
+
+        for (JournalEntry entry : entries) {
+            EventType type = entry.getType();
+            if (type == EventType.Z) {
+                updateEventType(types, EventType.Z);
+            } else if (type == EventType.A) {
+                updateEventType(types, EventType.A);
+            } else if (type == EventType.N) {
+                updateEventType(types, EventType.N);
+            } else {
+                updateEventType(types, EventType.Z);
+                updateEventType(types, EventType.A);
+            }
+        }
+
+        return types;
+    }
+
+    private void updateEventType(Map<EventType, Integer> types, EventType type) {
+        if (!types.containsKey(type)) {
+            types.put(type, 1);
+        } else {
+            int num = types.get(type);
+            types.replace(type, num + 1);
+        }
+    }
+
 
     // #######################################################################################
     // #######################################################################################
@@ -328,8 +360,10 @@ public class Main implements Journal, Planner {
         this.ratingBasedOnWeekday().forEach((k, v) -> System.out.printf("%s\t -> %.2f\n", k, v));
         System.out.println("-----------------------\n");
 
-
         System.out.println("Spent HRK " + this.totalSpent() + " in " + this.allSpent().length + " days.\n");
+        System.out.println("Number of event types:\n");
+
+        this.numOfEventTypes().forEach((k, v) -> System.out.println(k + " : " + v));
 
         System.out.println(this.toJournal());
 

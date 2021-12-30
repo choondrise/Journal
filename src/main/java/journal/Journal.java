@@ -98,6 +98,11 @@ public interface Journal {
     Map<String, Double> moneySpentBasedOnEventType();
 
     /**
+     * @return
+     */
+    Map<EventType, Integer> numOfEventTypes();
+
+    /**
      * @return journal-like output of every entry
      */
     String toJournal();
