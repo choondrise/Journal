@@ -24,7 +24,7 @@ public class JournalEntryParser {
      * @return list of journal entries parsed from current directory text files
      */
     public static List<JournalEntry> parse() throws IOException, ParseException {
-        Map<String, String> files = ParserUtil.readDirContent("/src/main/resources/");
+        Map<String, String> files = ParserUtil.readDirContent("/src/main/resources");
         List<JournalEntry> entries = new ArrayList<>();
 
         for (Map.Entry<String, String> file : files.entrySet()) {
@@ -44,21 +44,11 @@ public class JournalEntryParser {
 
             Date day = new SimpleDateFormat("dd-MM-yyyy").parse(file.getKey());
             float rating = Float.parseFloat(entryParts[1]);
-            Date start = new SimpleDateFormat("dd-MM-yyyy HH:mm").parse(file.getKey() + " " + ParserUtil.dateFormatFix(entryParts[3]));
-            Date end = new SimpleDateFormat("dd-MM-yyyy HH:mm").parse(file.getKey() + " " + ParserUtil.dateFormatFix(entryParts[5]));
+            Date start = new SimpleDateFormat("dd-MM-yyyy HH:mm").parse(file.getKey() + " " + entryParts[3]);
+            Date end = new SimpleDateFormat("dd-MM-yyyy HH:mm").parse(file.getKey() + " " + entryParts[5]);
             String events = entryParts[7];
             int spent = Integer.parseInt(entryParts[9]);
-            String typeName = entryParts[11];
-
-            EventType type;
-
-            switch(typeName) {
-                case "Z" -> type = EventType.Z;
-                case "A" -> type = EventType.A;
-                case "N" -> type = EventType.N;
-                case "M" -> type = EventType.M;
-                default -> throw new IOException("Cannot read event type");
-            }
+            EventType type = EventType.parse(entryParts[11]);
 
             entries.add(new JournalEntry(day, rating, start, end, events, spent, type));
 

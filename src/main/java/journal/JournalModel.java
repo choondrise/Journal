@@ -10,7 +10,7 @@ import java.util.Map;
  *
  * @author choondrise
  */
-public interface Journal {
+public interface JournalModel {
 
     /**
      * @return average rating of all days

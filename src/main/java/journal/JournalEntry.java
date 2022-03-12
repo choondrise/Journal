@@ -1,6 +1,7 @@
 package journal;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Represents single day in life.

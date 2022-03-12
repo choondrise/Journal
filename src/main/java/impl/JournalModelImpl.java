@@ -1,14 +1,13 @@
-package main;
+package impl;
 
 import journal.EventType;
-import journal.Journal;
+import journal.JournalModel;
 import journal.JournalEntry;
 import journal.parser.JournalEntryParser;
 import planner.Plan;
 import planner.PlanEntry;
 import planner.PlanType;
 import planner.Planner;
-import planner.parser.PlanEntryParser;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -21,7 +20,7 @@ import java.util.stream.Collectors;
  *
  * @author choondrise
  */
-public class Main implements Journal, Planner {
+public class JournalModelImpl implements JournalModel, Planner {
 
     /**
      * <code>JournalEntries</code> used for calculating journaling statistics.
@@ -41,7 +40,7 @@ public class Main implements Journal, Planner {
      *
      * @param entries list of journal entries to be initialized
      */
-    public Main(List<JournalEntry> entries, List<PlanEntry> plans) {
+    public JournalModelImpl(List<JournalEntry> entries, List<PlanEntry> plans) {
         this.entries = entries;
         this.plans = plans;
     }
@@ -185,7 +184,9 @@ public class Main implements Journal, Planner {
         StringBuilder sb = new StringBuilder();
 
         for (JournalEntry entry : entries) {
-            sb.append(String.format("| %-100s|", entry.getDate())).append("\n");
+            Date date = entry.getDate();
+            String[] dateString = date.toString().split("\\s+");
+            sb.append(String.format("| %-100s|", dateString[1] + ' ' + dateString[2])).append("\n");
             StringBuilder line = new StringBuilder();
             String[] events = entry.getEvents().split("\\s+");
 
@@ -319,12 +320,12 @@ public class Main implements Journal, Planner {
      */
     public static void main(String[] args) {
         List<JournalEntry> entries;
-        List<PlanEntry> plans;
+        List<PlanEntry> plans = new ArrayList<>();
 
         try {
             entries = JournalEntryParser.parse();
-            plans = PlanEntryParser.parse();
-            Main journal = new Main(entries, plans);
+            // plans = PlanEntryParser.parse();
+            JournalModelImpl journal = new JournalModelImpl(entries, plans);
 
             // TODO: try communicating with user and output accordingly
 
@@ -367,6 +368,7 @@ public class Main implements Journal, Planner {
 
         System.out.println(this.toJournal());
 
+        // commit - change journal output and dont use planner
     }
 
     /**
