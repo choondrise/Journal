@@ -1,4 +1,4 @@
-package single;
+package gui.single;
 
 public interface SingleDocumentListener {
     void documentModifyStatusUpdated(SingleDocumentModel model);

@@ -1,4 +1,4 @@
-package single;
+package gui.single;
 
 
 import journal.JournalEntry;

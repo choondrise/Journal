@@ -1,4 +1,4 @@
-package layout;
+package gui.layout;
 
 import java.awt.*;
 

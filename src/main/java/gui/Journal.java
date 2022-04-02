@@ -1,12 +1,12 @@
 package gui;
 
-import impl.JournalModelImpl;
+import journal.impl.JournalModelImpl;
 import journal.JournalEntry;
 import journal.JournalModel;
 import journal.parser.JournalEntryParser;
 import planner.PlanEntry;
-import single.DefaultSingleDocumentModel;
-import single.SingleDocumentModel;
+import gui.single.DefaultSingleDocumentModel;
+import gui.single.SingleDocumentModel;
 
 import javax.swing.*;
 import java.awt.*;

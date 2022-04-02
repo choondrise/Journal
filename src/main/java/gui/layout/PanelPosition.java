@@ -1,4 +1,4 @@
-package layout;
+package gui.layout;
 
 public class PanelPosition {
 

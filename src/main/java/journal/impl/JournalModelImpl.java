@@ -1,4 +1,4 @@
-package impl;
+package journal.impl;
 
 import journal.EventType;
 import journal.JournalModel;
