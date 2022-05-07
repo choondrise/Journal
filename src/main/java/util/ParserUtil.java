@@ -16,19 +16,6 @@ import java.util.*;
 public class ParserUtil {
 
     /**
-     * Fixes incompatible wrong date input (H:mm -> HH:mm), e.g. 3:00 instead of 03:00.
-     *
-     * @param date date to be fixed
-     * @return fixed date format (HH:mm)
-     */
-    public static String dateFormatFix(String date) {
-        if (date.length() == 4) {
-            return "0" + date;
-        }
-        return date;
-    }
-
-    /**
      * @return map of string, string consisting of current directory text files
      * and their names
      */

@@ -26,6 +26,9 @@ public class JournalEntryGenerator {
         String year = String.valueOf(LocalDate.now().getYear());
 
         String fileName = String.format("%s-%s-%s", day, month, year);
+
+        if (args.length == 1) fileName = args[0];
+
         String dirName = System.getProperty("user.dir");
 
         try {
